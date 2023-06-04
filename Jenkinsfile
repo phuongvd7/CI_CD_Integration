@@ -1,9 +1,9 @@
 def mvnHome
 
-node('node'){
+node('node_slave'){
    stage('git checkout'){
       try {
-       git credentialsId: 'git-token', url: 'https://github.com/rbngtm1/CI_CD_Integration'
+       git , url: 'https://github.com/phuongvd7/CI_CD_Integration'
       } catch(err) {
          sh "echo error in checkout"
       }
@@ -30,14 +30,14 @@ node('node'){
       }
    }
 
-   stage('package and generate artifacts'){
-      try {
-         sh "$mvnHome/bin/mvn clean package -DskipTests=true"
-         archiveArtifacts allowEmptyArchive: true, artifacts: 'addressbook_main/target/**/*.war'
-      } catch(err) {
-         sh "echo error in packaging and generating artifacts"
-      }
-   }
+   // stage('package and generate artifacts'){
+   //    try {
+   //       sh "$mvnHome/bin/mvn clean package -DskipTests=true"
+   //       archiveArtifacts allowEmptyArchive: true, artifacts: 'addressbook_main/target/**/*.war'
+   //    } catch(err) {
+   //       sh "echo error in packaging and generating artifacts"
+   //    }
+   // }
 
    // stage('deployment of application using docker'){
    //    try {
@@ -52,29 +52,29 @@ node('node'){
    //    }
    // }
 
-   stage('deployment of an application'){
-      try {
-         sshagent(['target-key-shared']) {
-            sh "scp -o StrictHostKeyChecking=no tomcat.sh ec2-user@10.0.0.137:/tmp"
-            sh "scp -o StrictHostKeyChecking=no symlink_target.sh ec2-user@10.0.0.137:/tmp"
-            sh "ssh -o StrictHostKeyChecking=no ec2-user@10.0.0.137 /tmp/tomcat.sh"
-            sh "scp -o StrictHostKeyChecking=no addressbook_main/target/addressbook.war ec2-user@10.0.0.137:/tmp"
-            sh "ssh -o StrictHostKeyChecking=no ec2-user@10.0.0.137 /tmp/symlink_target.sh"
-         }
-      } catch(err){
-         echo "error in deployment of an application"
-      }
-   }
+   // stage('deployment of an application'){
+   //    try {
+   //       sshagent(['target-key-shared']) {
+   //          sh "scp -o StrictHostKeyChecking=no tomcat.sh ec2-user@10.0.0.137:/tmp"
+   //          sh "scp -o StrictHostKeyChecking=no symlink_target.sh ec2-user@10.0.0.137:/tmp"
+   //          sh "ssh -o StrictHostKeyChecking=no ec2-user@10.0.0.137 /tmp/tomcat.sh"
+   //          sh "scp -o StrictHostKeyChecking=no addressbook_main/target/addressbook.war ec2-user@10.0.0.137:/tmp"
+   //          sh "ssh -o StrictHostKeyChecking=no ec2-user@10.0.0.137 /tmp/symlink_target.sh"
+   //       }
+   //    } catch(err){
+   //       echo "error in deployment of an application"
+   //    }
+   // }
    
-   stage('artifacts to s3'){
-      try {
-         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'deploytos3', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-            sh "aws s3 ls"
-            sh "aws s3 mb s3://cloudyeti-bucket-for-aws"
-            sh "aws s3 cp addressbook_main/target/addressbook.war s3://cloudyeti-bucket-for-aws"
-         }
-      } catch(err) {
-         sh "echo error in sending artifacts to s3"
-      }
-   }
+   // stage('artifacts to s3'){
+   //    try {
+   //       withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'deploytos3', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+   //          sh "aws s3 ls"
+   //          sh "aws s3 mb s3://cloudyeti-bucket-for-aws"
+   //          sh "aws s3 cp addressbook_main/target/addressbook.war s3://cloudyeti-bucket-for-aws"
+   //       }
+   //    } catch(err) {
+   //       sh "echo error in sending artifacts to s3"
+   //    }
+   // }
 }
