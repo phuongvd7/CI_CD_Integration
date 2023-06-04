@@ -30,14 +30,14 @@ node('node_slave'){
       }
    }
 
-   // stage('package and generate artifacts'){
-   //    try {
-   //       sh "$mvnHome/bin/mvn clean package -DskipTests=true"
-   //       archiveArtifacts allowEmptyArchive: true, artifacts: 'addressbook_main/target/**/*.war'
-   //    } catch(err) {
-   //       sh "echo error in packaging and generating artifacts"
-   //    }
-   // }
+   stage('package and generate artifacts'){
+      try {
+         sh "$mvnHome/bin/mvn clean package -DskipTests=true"
+         archiveArtifacts allowEmptyArchive: true, artifacts: '/home/ec2-user/workspace/ex1/workspace/test-pipleline-agent/addressbook_main/target/**/*.war', followSymlinks: false
+      } catch(err) {
+         sh "echo error in packaging and generating artifacts"
+      }
+   }
 
    // stage('deployment of application using docker'){
    //    try {
