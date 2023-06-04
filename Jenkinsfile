@@ -3,7 +3,7 @@ def mvnHome
 node('node_slave'){
    stage('git checkout'){
       try {
-       git , url: 'https://github.com/phuongvd7/CI_CD_Integration'
+       git branch: 'feature1', url: 'https://github.com/phuongvd7/CI_CD_Integration'
       } catch(err) {
          sh "echo error in checkout"
       }
