@@ -19,16 +19,16 @@ node('node_slave'){
       }
    }
    
-   // stage('test case and report'){
-   //    try {
-   //       echo "executing test cases"
-   //       junit allowEmptyResults: true, testResults: 'addressbook_main/target/surefire-reports/*.xml'
-   //       publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'addressbook_main/target/site', reportFiles: 'surefire-report.html', reportName: 'SureFireReportHTML', reportTitles: ''])
+   stage('test case and report'){
+      try {
+         echo "executing test cases"
+         junit allowEmptyResults: true, testResults: '/home/ec2-user/workspace/ex1/workspace/test-pipleline-agent/addressbook_main/target/surefire-reports'
+         publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '/home/ec2-user/workspace/ex1/workspace/test-pipleline-agent/addressbook_main/target/site', reportFiles: 'surefire-report.html', reportName: 'SureFireReportHTML', reportTitles: '', useWrapperFileDirectly: true])
 
-   //    } catch(err){
-   //       throw err
-   //    }
-   // }
+      } catch(err){
+         throw err
+      }
+   }
 
    // stage('package and generate artifacts'){
    //    try {
