@@ -39,6 +39,21 @@ node('node_slave'){
       }
    }
 
+   stage('deployment of application using docker'){
+      try {
+         sh """
+         docker version
+         docker build -t phuongvd7/archiveartifacts:${BUILD_NUMBER} -f Dockerfile .
+         docker run -p 8080:8080 -d phuongvd7/archiveartifacts:${BUILD_NUMBER}
+         """
+         withDockerRegistry(credentialsId: 'dockerhub') {
+         sh "docker push phuongvd7/archiveartifacts:${BUILD_NUMBER}"
+         }
+      } catch(err) {
+         sh "echo error in deployment using docker"
+      }
+   }
+
    // stage('deployment of application using docker'){
    //    try {
    //       sh "docker version"
