@@ -2,7 +2,7 @@ def mvnHome
 
 node('node_slave'){
    environment {
-   REGISTRY = "phuongvd7/archiveartifacts"
+   REGISTRY = 'phuongvd7/archiveartifacts'
    //  registryCredential = 'docker-hub'
    //  dockerImage = ''
   }
