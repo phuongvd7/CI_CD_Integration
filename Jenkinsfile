@@ -48,11 +48,11 @@ node('node_slave'){
       try {
          sh """
          docker version
-         docker build -t ${registry}:${BUILD_NUMBER} -f Dockerfile .
-         docker run -p 8080:8080 -d ${registry}:${BUILD_NUMBER}
+         docker build -t phuongvd7/archiveartifacts:${BUILD_NUMBER} -f Dockerfile .
+         docker run -p 8080:8080 -d phuongvd7/archiveartifacts:${BUILD_NUMBER}
          """
          withDockerRegistry(credentialsId: 'dockerhub') {
-         sh "docker push ${registry}:${BUILD_NUMBER}"
+         sh "docker push phuongvd7/archiveartifacts:${BUILD_NUMBER}"
          }
       } catch(err) {
          sh "echo error in deployment using docker"
